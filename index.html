@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VANGOR Interior Design — Pedido de Orçamento</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bronze: #A57350;
+    --bronze-light: #C4956E;
+    --bronze-faint: rgba(165,115,80,0.12);
+    --off-black: #111110;
+    --dark-card: #211F1C;
+    --dark-border: rgba(165,115,80,0.2);
+    --text-primary: #F5F0EB;
+    --text-secondary: rgba(245,240,235,0.6);
+    --text-muted: rgba(245,240,235,0.35);
+    --font: 'Outfit', sans-serif;
+    --radius: 4px;
+    --radius-lg: 8px;
+    --transition: 0.25s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  html { font-size: 16px; scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font);
+    background-color: var(--off-black);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(165,115,80,0.08) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page-wrapper {
+    width: 100%;
+    max-width: 680px;
+    padding: 60px 24px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 56px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .logo-area { display: flex; flex-direction: column; align-items: center; margin-bottom: 32px; }
+  .logo-symbol { width: 56px; height: auto; margin-bottom: 12px; display: block; }
+
+  .logo-wordmark {
+    font-size: 28px; font-weight: 300;
+    letter-spacing: 0.35em; color: var(--text-primary); text-transform: uppercase;
+  }
+
+  .logo-sub {
+    font-size: 9px; font-weight: 400;
+    letter-spacing: 0.4em; color: var(--bronze); text-transform: uppercase; margin-top: 3px;
+  }
+
+  .logo-gondomar {
+    font-size: 8px;
+    font-weight: 400;
+    letter-spacing: 0.35em;
+    color: var(--bronze);
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .logo-crasto {
+    font-size: 20px;
+    font-weight: 300;
+    letter-spacing: 0.28em;
+    color: #F5F0EB;
+    text-transform: uppercase;
+    margin-top: 1px;
+  }
+
+  .divider { width: 40px; height: 1px; background: var(--bronze); opacity: 0.5; margin: 24px 0; }
+
+  .header-headline {
+    font-size: 15px; font-weight: 400; color: var(--text-secondary);
+    text-align: center; letter-spacing: 0.02em; line-height: 1.6; max-width: 420px;
+  }
+
+  /* Progress */
+  .progress-container { margin-bottom: 40px; animation: fadeUp 0.6s 0.1s ease both; }
+  .progress-meta { display: flex; justify-content: space-between; margin-bottom: 10px; }
+  .progress-label { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); }
+  .progress-count { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; color: var(--bronze); }
+  .progress-track { height: 1px; background: rgba(165,115,80,0.15); overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--bronze); transition: width 0.5s cubic-bezier(0.4,0,0.2,1); }
+
+  /* Steps */
+  .step { display: none; animation: fadeUp 0.45s ease both; }
+  .step.active { display: block; }
+
+  .step-question { font-size: 22px; font-weight: 300; color: var(--text-primary); line-height: 1.35; margin-bottom: 8px; letter-spacing: -0.01em; }
+  .step-hint { font-size: 13px; color: var(--text-muted); margin-bottom: 32px; letter-spacing: 0.02em; }
+
+  /* Option cards */
+  .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 36px; }
+  .options-grid.single-col { grid-template-columns: 1fr; }
+
+  .option-card {
+    background: var(--dark-card);
+    border: 1px solid var(--dark-border);
+    border-radius: var(--radius-lg);
+    padding: 18px 20px;
+    cursor: pointer;
+    transition: border-color var(--transition), background var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  .option-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: var(--bronze-faint); opacity: 0; transition: opacity var(--transition);
+  }
+
+  .option-card:hover { border-color: rgba(165,115,80,0.45); }
+  .option-card:hover::before { opacity: 0.5; }
+  .option-card.selected { border-color: var(--bronze); background: rgba(165,115,80,0.08); }
+  .option-card.selected::before { opacity: 1; }
+
+  .option-icon {
+    width: 36px; height: 36px; border-radius: 4px;
+    background: rgba(165,115,80,0.12);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: background var(--transition);
+  }
+  .option-card.selected .option-icon { background: rgba(165,115,80,0.25); }
+
+  .option-svg { width: 18px; height: 18px; stroke: var(--bronze-light); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .option-content { flex: 1; min-width: 0; }
+  .option-label { font-size: 14px; font-weight: 500; color: var(--text-primary); display: block; letter-spacing: 0.01em; }
+  .option-desc { font-size: 12px; color: var(--text-muted); display: block; margin-top: 2px; line-height: 1.4; }
+
+  .option-check {
+    width: 18px; height: 18px; border-radius: 50%;
+    border: 1px solid rgba(165,115,80,0.3);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: all var(--transition);
+  }
+  .option-card.selected .option-check { background: var(--bronze); border-color: var(--bronze); }
+  .option-check::after { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--off-black); opacity: 0; transition: opacity var(--transition); }
+  .option-card.selected .option-check::after { opacity: 1; }
+
+  .option-card.checkbox-style .option-check { border-radius: var(--radius); }
+  .option-card.checkbox-style.selected .option-check::after {
+    width: 7px; height: 4px; border-radius: 0; background: none;
+    border-bottom: 1.5px solid var(--off-black); border-left: 1.5px solid var(--off-black);
+    transform: rotate(-45deg) translateY(-1px); opacity: 1;
+  }
+
+  /* Inputs */
+  .input-group { margin-bottom: 16px; }
+  .input-label { display: block; font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+
+  .input-field {
+    width: 100%; background: var(--dark-card); border: 1px solid var(--dark-border);
+    border-radius: var(--radius-lg); padding: 14px 18px;
+    font-family: var(--font); font-size: 15px; font-weight: 400;
+    color: var(--text-primary); outline: none; transition: border-color var(--transition);
+    appearance: none; -webkit-appearance: none;
+  }
+  .input-field::placeholder { color: var(--text-muted); }
+  .input-field:focus { border-color: var(--bronze); background: rgba(165,115,80,0.04); }
+
+  .select-wrapper { position: relative; }
+  .select-wrapper::after {
+    content: ''; position: absolute; right: 18px; top: 50%;
+    transform: translateY(-50%);
+    border-left: 5px solid transparent; border-right: 5px solid transparent;
+    border-top: 6px solid var(--text-muted); pointer-events: none;
+  }
+  select.input-field { cursor: pointer; padding-right: 44px; }
+  select.input-field option { background: #211F1C; color: var(--text-primary); }
+  select.input-field:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  /* Nav */
+  .nav-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+
+  .btn-back {
+    background: none; border: 1px solid var(--dark-border); border-radius: var(--radius-lg);
+    padding: 14px 24px; font-family: var(--font); font-size: 13px; font-weight: 500;
+    letter-spacing: 0.06em; color: var(--text-muted); cursor: pointer;
+    transition: all var(--transition); text-transform: uppercase;
+  }
+  .btn-back:hover { color: var(--text-secondary); border-color: rgba(165,115,80,0.3); }
+
+  .btn-next {
+    flex: 1; background: var(--bronze); border: none; border-radius: var(--radius-lg);
+    padding: 16px 32px; font-family: var(--font); font-size: 13px; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--off-black);
+    cursor: pointer; transition: all var(--transition); position: relative; overflow: hidden;
+  }
+  .btn-next::after { content: ''; position: absolute; inset: 0; background: rgba(255,255,255,0.08); opacity: 0; transition: opacity var(--transition); }
+  .btn-next:hover::after { opacity: 1; }
+  .btn-next:active { transform: scale(0.99); }
+  .btn-next:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  /* Success */
+  .success-screen { display: none; flex-direction: column; align-items: center; text-align: center; padding: 40px 0; animation: fadeUp 0.5s ease both; }
+  .success-screen.active { display: flex; }
+  .success-icon { width: 64px; height: 64px; border-radius: 50%; border: 1px solid var(--bronze); display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+  .success-title { font-size: 26px; font-weight: 300; color: var(--text-primary); margin-bottom: 12px; }
+  .success-subtitle { font-size: 15px; color: var(--text-secondary); line-height: 1.6; max-width: 360px; }
+  .success-divider { width: 32px; height: 1px; background: var(--bronze); opacity: 0.5; margin: 28px 0; }
+
+  .error-msg { font-size: 12px; color: #C4634A; margin-top: -24px; margin-bottom: 20px; display: none; }
+  .error-msg.show { display: block; }
+
+  /* Data accordion */
+  .data-accordion { margin-top: 48px; border-top: 1px solid rgba(165,115,80,0.12); padding-bottom: 20px; }
+
+  .data-accordion-trigger {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 18px 0 0; cursor: pointer; background: none; border: none;
+    font-family: var(--font); font-size: 12px; font-weight: 400;
+    letter-spacing: 0.08em; color: var(--text-muted); width: 100%;
+    transition: color var(--transition);
+  }
+  .data-accordion-trigger:hover { color: var(--text-secondary); }
+  .data-accordion-trigger svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform var(--transition); flex-shrink: 0; }
+  .data-accordion-trigger.open svg { transform: rotate(180deg); }
+
+  .data-accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1); }
+  .data-accordion-body.open { max-height: 400px; }
+
+  .data-accordion-content { background: var(--dark-card); border: 1px solid var(--dark-border); border-radius: var(--radius-lg); padding: 20px 22px; margin-top: 14px; font-size: 13px; line-height: 1.65; color: var(--text-secondary); }
+  .data-accordion-content a { color: var(--bronze-light); text-decoration: underline; text-underline-offset: 3px; transition: color var(--transition); }
+  .data-accordion-content a:hover { color: var(--bronze); }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+  @media (max-width: 520px) {
+    .options-grid { grid-template-columns: 1fr; }
+    .input-row { grid-template-columns: 1fr; }
+    .page-wrapper { padding: 40px 20px 60px; }
+    .step-question { font-size: 19px; }
+  }
+</style>
+</head>
+<body>
+<div class="page-wrapper">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="logo-area">
+      <div class="logo-wordmark">VANGOR</div>
+      <div class="logo-gondomar">Gondomar</div>
+      <div class="logo-crasto">CRASTO</div>
+      <div class="logo-sub">Interior Design</div>
+    </div>
+    <div class="divider"></div>
+    <p class="header-headline">Diga-nos mais sobre o seu projeto e entraremos em contacto para uma primeira conversa, sem compromisso.</p>
+  </header>
+
+  <!-- Progress -->
+  <div class="progress-container" id="progressContainer">
+    <div class="progress-meta">
+      <span class="progress-label">Progresso</span>
+      <span class="progress-count" id="progressCount">1 / 7</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width:14.3%"></div>
+    </div>
+  </div>
+
+  <!-- STEP 1 -->
+  <div class="step active" id="step1">
+    <h2 class="step-question">Qual é o tipo de projeto?</h2>
+    <p class="step-hint">Selecione a opção que melhor descreve o que pretende.</p>
+    <div class="options-grid single-col" id="step1-options">
+
+      <div class="option-card" data-value="consultoria" onclick="selectOption(this,'step1')">
+        <div class="option-icon"><svg class="option-svg" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+        <div class="option-content">
+          <span class="option-label">Consultoria pontual</span>
+          <span class="option-desc">Aconselhamento sobre um espaço específico</span>
+        </div>
+        <div class="option-check"></div>
+      </div>
+
+      <div class="option-card" data-value="remodelacao" onclick="selectOption(this,'step1')">
+        <div class="option-icon"><svg class="option-svg" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        <div class="option-content">
+          <span class="option-label">Remodelação</span>
+          <span class="option-desc">Transformar ou atualizar um espaço existente</span>
+        </div>
+        <div class="option-check"></div>
+      </div>
+
+      <div class="option-card" data-value="obra-nova" onclick="selectOption(this,'step1')">
+        <div class="option-icon"><svg class="option-svg" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+        <div class="option-content">
+          <span class="option-label">Obra de raiz</span>
+          <span class="option-desc">Projeto novo, construção ou renovação total</span>
+        </div>
+        <div class="option-check"></div>
+      </div>
+
+      <div class="option-card" data-value="design-interiores" onclick="selectOption(this,'step1')">
+        <div class="option-icon"><svg class="option-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></div>
+        <div class="option-content">
+          <span class="option-label">Design de interiores</span>
+          <span class="option-desc">Personalização ou adaptação de espaços, mobiliário e decoração</span>
+        </div>
+        <div class="option-check"></div>
+      </div>
+
+    </div>
+    <div class="nav-row">
+      <button class="btn-next" id="next1" onclick="nextStep(2)" disabled>Continuar</button>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="step" id="step2">
+    <h2 class="step-question">Quais as divisões envolvidas?</h2>
+    <p class="step-hint">Pode selecionar várias opções.</p>
+    <div class="options-grid" id="step2-options">
+
+      <div class="option-card checkbox-style" data-value="sala" onclick="toggleOption(this)">
+        <div class="option-icon"><svg class="option-svg" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div>
+        <div class="option-content"><span class="option-label">Sala de estar/jantar</span></div>
+        <div class="option-check"></div>
+      </div>
+
+      <div class="option-card checkbox-style" data-value="cozinha" onclick="toggleOption(this)">
+        <div class="option-icon"><svg class="option-svg" viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
+        <div class="option-content"><span class="option-label">Cozinha</span></div>
+        <div class="option-check"></div>
+      </div>
+
+      <div class="option-card checkbox-style" data-value="quarto" onclick="toggleOption(this)">
+        <div class="option-icon"><svg class="option-svg" viewBox="0 0 24 24"><path d="M2 4v16"/><path d="M22 4v16"/><path d="M2 8h20"/><path d="M2 16h20"/><path d="M6 8v8"/><path d="M18 8v8"/></svg></div>
+        <div class="option-content"><span class="option-label">Quarto(s)</span></div>
+        <div class="option-check"></div>
+      </div>
+
+      <div class="option-card checkbox-style" data-value="casa-banho" onclick="toggleOption(this)">
+        <div class="option-icon"><svg class="option-svg" viewBox="0 0 24 24"><path d="M4 12h16"/><path d="M4 12V6a2 2 0 012-2h2"/><path d="M4 12v5a5 5 0 005 5h6a5 5 0 005-5v-5"/></svg></div>
+        <div class="option-content"><span class="option-label">Casa de banho</span></div>
+        <div class="option-check"></div>
+      </div>
+
+      <div class="option-card checkbox-style" data-value="escritorio" onclick="toggleOption(this)">
+        <div class="option-icon"><svg class="option-svg" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg></div>
+        <div class="option-content"><span class="option-label">Escritório</span></div>
+        <div class="option-check"></div>
+      </div>
+
+      <div class="option-card checkbox-style" data-value="hall" onclick="toggleOption(this)">
+        <div class="option-icon"><svg class="option-svg" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+        <div class="option-content"><span class="option-label">Hall / Corredor</span></div>
+        <div class="option-check"></div>
+      </div>
+
+      <div class="option-card checkbox-style" data-value="exterior" onclick="toggleOption(this)">
+        <div class="option-icon"><svg class="option-svg" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div class="option-content"><span class="option-label">Exterior / Jardim</span></div>
+        <div class="option-check"></div>
+      </div>
+
+      <div class="option-card checkbox-style" data-value="total" onclick="toggleOption(this)">
+        <div class="option-icon"><svg class="option-svg" viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
+        <div class="option-content"><span class="option-label">Casa completa</span></div>
+        <div class="option-check"></div>
+      </div>
+
+    </div>
+    <div class="nav-row">
+      <button class="btn-back" onclick="goBack(1)">Voltar</button>
+      <button class="btn-next" id="next2" onclick="nextStep(3)" disabled>Continuar</button>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="step" id="step3">
+    <h2 class="step-question">Em que fase se encontra?</h2>
+    <p class="step-hint">Ajuda-nos a perceber onde está no processo de decisão.</p>
+    <div class="options-grid single-col" id="step3-options">
+
+      <div class="option-card" data-value="decidido" onclick="selectOption(this,'step3')">
+        <div class="option-icon"><svg class="option-svg" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="option-content">
+          <span class="option-label">Já decidi avançar</span>
+          <span class="option-desc">Quero iniciar o projeto em breve</span>
+        </div>
+        <div class="option-check"></div>
+      </div>
+
+      <div class="option-card" data-value="a-explorar" onclick="selectOption(this,'step3')">
+        <div class="option-icon"><svg class="option-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></div>
+        <div class="option-content">
+          <span class="option-label">Ainda a explorar</span>
+          <span class="option-desc">Estou a recolher informação e orçamentos</span>
+        </div>
+        <div class="option-check"></div>
+      </div>
+
+      <div class="option-card" data-value="prazo-definido" onclick="selectOption(this,'step3')">
+        <div class="option-icon"><svg class="option-svg" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+        <div class="option-content">
+          <span class="option-label">Tenho prazo definido</span>
+          <span class="option-desc">O projeto tem uma data-limite importante</span>
+        </div>
+        <div class="option-check"></div>
+      </div>
+
+    </div>
+    <div class="nav-row">
+      <button class="btn-back" onclick="goBack(2)">Voltar</button>
+      <button class="btn-next" id="next3" onclick="nextStep(4)" disabled>Continuar</button>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="step" id="step4">
+    <h2 class="step-question">Qual o investimento previsto?</h2>
+    <p class="step-hint">Um valor indicativo ajuda-nos a propor as melhores soluções.</p>
+    <div class="options-grid single-col" id="step4-options">
+
+      <div class="option-card" data-value="ate-10k" onclick="selectOption(this,'step4')">
+        <div class="option-content">
+          <span class="option-label">Até 10 000 €</span>
+          <span class="option-desc">Projetos pontuais ou de decoração</span>
+        </div>
+        <div class="option-check"></div>
+      </div>
+
+      <div class="option-card" data-value="10k-30k" onclick="selectOption(this,'step4')">
+        <div class="option-content">
+          <span class="option-label">10 000 € — 30 000 €</span>
+          <span class="option-desc">Remodelação parcial ou divisões específicas</span>
+        </div>
+        <div class="option-check"></div>
+      </div>
+
+      <div class="option-card" data-value="30k-75k" onclick="selectOption(this,'step4')">
+        <div class="option-content">
+          <span class="option-label">30 000 € — 75 000 €</span>
+          <span class="option-desc">Remodelação completa ou projeto de obra</span>
+        </div>
+        <div class="option-check"></div>
+      </div>
+
+      <div class="option-card" data-value="mais-75k" onclick="selectOption(this,'step4')">
+        <div class="option-content">
+          <span class="option-label">Mais de 75 000 €</span>
+          <span class="option-desc">Projeto de referência ou obra de raiz</span>
+        </div>
+        <div class="option-check"></div>
+      </div>
+
+    </div>
+    <div class="nav-row">
+      <button class="btn-back" onclick="goBack(3)">Voltar</button>
+      <button class="btn-next" id="next4" onclick="nextStep(5)" disabled>Continuar</button>
+    </div>
+  </div>
+
+  <!-- STEP 5 -->
+  <div class="step" id="step5">
+    <h2 class="step-question">Onde fica o espaço?</h2>
+    <p class="step-hint">Selecione o distrito e o concelho do imóvel.</p>
+    <div style="margin-bottom:32px;">
+      <div class="input-group">
+        <label class="input-label">Distrito</label>
+        <div class="select-wrapper">
+          <select class="input-field" id="distrito" onchange="updateConcelhos()">
+            <option value="">Selecione o distrito…</option>
+            <option>Aveiro</option><option>Beja</option><option>Braga</option>
+            <option>Bragança</option><option>Castelo Branco</option><option>Coimbra</option>
+            <option>Évora</option><option>Faro</option><option>Guarda</option>
+            <option>Leiria</option><option>Lisboa</option><option>Portalegre</option>
+            <option>Porto</option><option>Santarém</option><option>Setúbal</option>
+            <option>Viana do Castelo</option><option>Vila Real</option><option>Viseu</option>
+            <option>Ilha da Madeira</option><option>Ilha dos Açores</option>
+          </select>
+        </div>
+      </div>
+      <div class="input-group">
+        <label class="input-label">Concelho</label>
+        <div class="select-wrapper">
+          <select class="input-field" id="concelho" onchange="checkDropdowns()" disabled>
+            <option value="">Selecione primeiro o distrito…</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="nav-row">
+      <button class="btn-back" onclick="goBack(4)">Voltar</button>
+      <button class="btn-next" id="next5" onclick="nextStep(6)" disabled>Continuar</button>
+    </div>
+  </div>
+
+  <!-- STEP 6 -->
+  <div class="step" id="step6">
+    <h2 class="step-question">Quando pretende iniciar?</h2>
+    <p class="step-hint">Ajuda-nos a gerir a agenda e a dar-lhe a prioridade certa.</p>
+    <div class="options-grid single-col" id="step6-options">
+
+      <div class="option-card" data-value="3-meses" onclick="selectOption(this,'step6')">
+        <div class="option-content"><span class="option-label">Nos próximos 3 meses</span></div>
+        <div class="option-check"></div>
+      </div>
+
+      <div class="option-card" data-value="6-meses" onclick="selectOption(this,'step6')">
+        <div class="option-content"><span class="option-label">Entre 3 a 6 meses</span></div>
+        <div class="option-check"></div>
+      </div>
+
+      <div class="option-card" data-value="sem-pressa" onclick="selectOption(this,'step6')">
+        <div class="option-content">
+          <span class="option-label">Sem data definida</span>
+          <span class="option-desc">Ainda em fase de planeamento</span>
+        </div>
+        <div class="option-check"></div>
+      </div>
+
+    </div>
+    <div class="nav-row">
+      <button class="btn-back" onclick="goBack(5)">Voltar</button>
+      <button class="btn-next" id="next6" onclick="nextStep(7)" disabled>Continuar</button>
+    </div>
+  </div>
+
+  <!-- STEP 7 -->
+  <div class="step" id="step7">
+    <h2 class="step-question">Como podemos contactar?</h2>
+    <p class="step-hint">Os seus dados são confidenciais e apenas usados para responder ao seu pedido.</p>
+    <div style="margin-bottom:32px;">
+      <div class="input-row" style="margin-bottom:16px;">
+        <div class="input-group" style="margin-bottom:0">
+          <label class="input-label">Nome</label>
+          <input class="input-field" id="nome" type="text" placeholder="O seu nome" oninput="checkContactForm()">
+        </div>
+        <div class="input-group" style="margin-bottom:0">
+          <label class="input-label">Apelido</label>
+          <input class="input-field" id="apelido" type="text" placeholder="Apelido" oninput="checkContactForm()">
+        </div>
+      </div>
+      <div class="input-group">
+        <label class="input-label">Email</label>
+        <input class="input-field" id="email" type="email" placeholder="email@exemplo.com" oninput="checkContactForm()">
+      </div>
+      <div class="input-group">
+        <label class="input-label">Telefone</label>
+        <input class="input-field" id="telefone" type="tel" placeholder="+351 9XX XXX XXX" oninput="checkContactForm()">
+      </div>
+      <div class="input-group" style="margin-bottom:0">
+        <label class="input-label">Mensagem (opcional)</label>
+        <textarea class="input-field" id="mensagem" rows="3" placeholder="Conte-nos mais sobre o seu projeto…" style="resize:vertical;min-height:80px;"></textarea>
+      </div>
+    </div>
+    <p class="error-msg" id="formError">Por favor preencha todos os campos obrigatórios.</p>
+    <div class="nav-row">
+      <button class="btn-back" onclick="goBack(6)">Voltar</button>
+      <button class="btn-next" id="next7" onclick="submitForm()" disabled>Enviar pedido</button>
+    </div>
+  </div>
+
+  <!-- Success -->
+  <div class="success-screen" id="successScreen">
+    <div class="success-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#A57350" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <h2 class="success-title">Pedido recebido</h2>
+    <div class="success-divider"></div>
+    <p class="success-subtitle">Obrigado pelo seu interesse. A nossa equipa irá analisar o seu projeto e entrar em contacto em breve.</p>
+  </div>
+
+  <!-- Data protection -->
+  <div class="data-accordion">
+    <button class="data-accordion-trigger" id="dataToggle" onclick="toggleDataAccordion()">
+      Proteção de dados
+      <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="data-accordion-body" id="dataBody">
+      <div class="data-accordion-content">
+        <p>Os seus dados são tratados pela <strong>VANGOR Interior Design</strong> apenas para elaborar a nossa proposta e entrar em contacto consigo. Não partilhamos os seus dados com terceiros nesta fase.</p>
+        <p style="margin-top:10px;">Pode aceder, corrigir ou apagar os seus dados a qualquer momento através de <a href="mailto:geral@vangor.pt">geral@vangor.pt</a>. Mais detalhes na nossa <a href="#">Política de Privacidade</a>.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const state = { step1:null, step2:[], step3:null, step4:null, step5:'', step6:null };
+  const TOTAL_STEPS = 7;
+
+  const CONCELHOS = {
+    'Aveiro':['Águeda','Albergaria-a-Velha','Anadia','Arouca','Aveiro','Castelo de Paiva','Espinho','Estarreja','Ílhavo','Mealhada','Murtosa','Oliveira de Azeméis','Oliveira do Bairro','Ovar','Santa Maria da Feira','São João da Madeira','Sever do Vouga','Vagos','Vale de Cambra'],
+    'Beja':['Aljustrel','Almodôvar','Alvito','Barrancos','Beja','Castro Verde','Cuba','Ferreira do Alentejo','Mértola','Moura','Odemira','Ourique','Serpa','Vidigueira'],
+    'Braga':['Amares','Barcelos','Braga','Cabeceiras de Basto','Celorico de Basto','Esposende','Fafe','Guimarães','Póvoa de Lanhoso','Terras de Bouro','Vieira do Minho','Vila Nova de Famalicão','Vila Verde','Vizela'],
+    'Bragança':['Alfândega da Fé','Bragança','Carrazeda de Ansiães','Freixo de Espada à Cinta','Macedo de Cavaleiros','Miranda do Douro','Mirandela','Mogadouro','Torre de Moncorvo','Vila Flor','Vimioso','Vinhais'],
+    'Castelo Branco':['Belmonte','Castelo Branco','Covilhã','Fundão','Idanha-a-Nova','Oleiros','Penamacor','Proença-a-Nova','Sertã','Vila de Rei','Vila Velha de Ródão'],
+    'Coimbra':['Arganil','Cantanhede','Coimbra','Condeixa-a-Nova','Figueira da Foz','Góis','Lousã','Mira','Miranda do Corvo','Montemor-o-Velho','Oliveira do Hospital','Pampilhosa da Serra','Penacova','Penela','Soure','Tábua','Vila Nova de Poiares'],
+    'Évora':['Alandroal','Arraiolos','Borba','Estremoz','Évora','Montemor-o-Novo','Mora','Mourão','Portel','Redondo','Reguengos de Monsaraz','Vendas Novas','Viana do Alentejo','Vila Viçosa'],
+    'Faro':['Albufeira','Alcoutim','Aljezur','Castro Marim','Faro','Lagoa','Lagos','Loulé','Monchique','Olhão','Portimão','São Brás de Alportel','Silves','Tavira','Vila do Bispo','Vila Real de Santo António'],
+    'Guarda':['Aguiar da Beira','Almeida','Celorico da Beira','Figueira de Castelo Rodrigo','Fornos de Algodres','Gouveia','Guarda','Manteigas','Mêda','Pinhel','Sabugal','Seia','Trancoso','Vila Nova de Foz Côa'],
+    'Leiria':['Alcobaça','Alvaiázere','Ansião','Batalha','Bombarral','Caldas da Rainha','Castanheira de Pêra','Figueiró dos Vinhos','Leiria','Marinha Grande','Nazaré','Óbidos','Pedrógão Grande','Peniche','Pombal','Porto de Mós'],
+    'Lisboa':['Alenquer','Amadora','Arruda dos Vinhos','Azambuja','Cadaval','Cascais','Lisboa','Loures','Lourinhã','Mafra','Odivelas','Oeiras','Sintra','Sobral de Monte Agraço','Torres Vedras','Vila Franca de Xira'],
+    'Portalegre':['Alter do Chão','Arronches','Avis','Campo Maior','Castelo de Vide','Crato','Elvas','Fronteira','Gavião','Marvão','Monforte','Mora','Nisa','Ponte de Sor','Portalegre','Sousel'],
+    'Porto':['Amarante','Baião','Felgueiras','Gondomar','Lousada','Maia','Marco de Canaveses','Matosinhos','Paços de Ferreira','Paredes','Penafiel','Porto','Póvoa de Varzim','Santo Tirso','Trofa','Valongo','Vila do Conde','Vila Nova de Gaia'],
+    'Santarém':['Abrantes','Alcanena','Almeirim','Alpiarça','Benavente','Cartaxo','Chamusca','Constância','Coruche','Entroncamento','Ferreira do Zêzere','Golegã','Mação','Ourém','Rio Maior','Salvaterra de Magos','Santarém','Sardoal','Tomar','Torres Novas','Vila Nova da Barquinha'],
+    'Setúbal':['Alcácer do Sal','Alcochete','Almada','Barreiro','Grândola','Moita','Montijo','Palmela','Santiago do Cacém','Seixal','Sesimbra','Setúbal','Sines'],
+    'Viana do Castelo':['Arcos de Valdevez','Caminha','Melgaço','Monção','Paredes de Coura','Ponte da Barca','Ponte de Lima','Valença','Viana do Castelo','Vila Nova de Cerveira'],
+    'Vila Real':['Alijó','Boticas','Chaves','Mesão Frio','Mondim de Basto','Montalegre','Murça','Peso da Régua','Ribeira de Pena','Sabrosa','Santa Marta de Penaguião','Valpaços','Vila Pouca de Aguiar','Vila Real'],
+    'Viseu':['Armamar','Carregal do Sal','Castro Daire','Cinfães','Lamego','Mangualde','Moimenta da Beira','Mortágua','Nelas','Oliveira de Frades','Penalva do Castelo','Penedono','Resende','Santa Comba Dão','São João da Pesqueira','São Pedro do Sul','Sátão','Sernancelhe','Tabuaço','Tarouca','Tondela','Vila Nova de Paiva','Viseu','Vouzela'],
+    'Ilha da Madeira':['Calheta','Câmara de Lobos','Funchal','Machico','Ponta do Sol','Porto Moniz','Porto Santo','Ribeira Brava','Santa Cruz','Santana','São Vicente'],
+    'Ilha dos Açores':['Angra do Heroísmo','Calheta','Corvo','Horta','Lagoa','Lajes das Flores','Lajes do Pico','Madalena','Nordeste','Ponta Delgada','Povoação','Praia da Vitória','Ribeira Grande','Santa Cruz da Graciosa','Santa Cruz das Flores','São Roque do Pico','Velas','Vila do Corvo','Vila do Porto','Vila Franca do Campo']
+  };
+
+  function updateProgress(step) {
+    document.getElementById('progressFill').style.width = (step / TOTAL_STEPS * 100) + '%';
+    document.getElementById('progressCount').textContent = step + ' / ' + TOTAL_STEPS;
+  }
+
+  function selectOption(card, stepId) {
+    document.getElementById(stepId + '-options').querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    state[stepId] = card.dataset.value;
+    document.getElementById('next' + stepId.replace('step','')).disabled = false;
+  }
+
+  function toggleOption(card) {
+    card.classList.toggle('selected');
+    state.step2 = Array.from(document.querySelectorAll('#step2-options .option-card.selected')).map(c => c.dataset.value);
+    document.getElementById('next2').disabled = state.step2.length === 0;
+  }
+
+  function updateConcelhos() {
+    const distrito = document.getElementById('distrito').value;
+    const sel = document.getElementById('concelho');
+    sel.innerHTML = '<option value="">Selecione o concelho…</option>';
+    if (distrito && CONCELHOS[distrito]) {
+      CONCELHOS[distrito].forEach(c => {
+        const o = document.createElement('option');
+        o.value = c; o.textContent = c; sel.appendChild(o);
+      });
+      sel.disabled = false;
+    } else {
+      sel.disabled = true;
+    }
+    state.step5 = '';
+    document.getElementById('next5').disabled = true;
+  }
+
+  function checkDropdowns() {
+    const d = document.getElementById('distrito').value;
+    const c = document.getElementById('concelho').value;
+    state.step5 = d && c ? d + ' — ' + c : '';
+    document.getElementById('next5').disabled = !(d && c);
+  }
+
+  function checkContactForm() {
+    const nome    = document.getElementById('nome').value.trim();
+    const apelido = document.getElementById('apelido').value.trim();
+    const email   = document.getElementById('email').value.trim();
+    const tel     = document.getElementById('telefone').value.trim();
+    document.getElementById('next7').disabled = !(nome && apelido && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && tel);
+  }
+
+  function nextStep(n) {
+    document.getElementById('step'+(n-1)).classList.remove('active');
+    document.getElementById('step'+n).classList.add('active');
+    updateProgress(n);
+    window.scrollTo({ top:0, behavior:'smooth' });
+  }
+
+  function goBack(n) {
+    document.getElementById('step'+(n+1)).classList.remove('active');
+    document.getElementById('step'+n).classList.add('active');
+    updateProgress(n);
+    window.scrollTo({ top:0, behavior:'smooth' });
+  }
+
+  function toggleDataAccordion() {
+    document.getElementById('dataToggle').classList.toggle('open');
+    document.getElementById('dataBody').classList.toggle('open');
+  }
+
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyMYLGjfSNBeVO6y2C841-F0upUuWiT-NqEr1sjV6pWLr9qlXru5ihVcPhlNNsRk5hKVQ/exec';
+
+  function submitForm() {
+    const nome    = document.getElementById('nome').value.trim();
+    const apelido = document.getElementById('apelido').value.trim();
+    const email   = document.getElementById('email').value.trim();
+    const tel     = document.getElementById('telefone').value.trim();
+    if (!nome || !apelido || !email || !tel) {
+      document.getElementById('formError').classList.add('show'); return;
+    }
+
+    const btn = document.getElementById('next7');
+    btn.disabled = true;
+    btn.textContent = 'A enviar…';
+
+    const params = new URLSearchParams({
+      tipo_projeto:  state.step1 || '',
+      divisoes:      (state.step2 || []).join(', '),
+      fase_decisao:  state.step3 || '',
+      orcamento:     state.step4 || '',
+      localizacao:   state.step5 || '',
+      prazo:         state.step6 || '',
+      nome:          nome + ' ' + apelido,
+      email:         email,
+      telefone:      tel,
+      mensagem:      document.getElementById('mensagem').value.trim(),
+      callback:      'handleResponse'
+    });
+
+    window.handleResponse = function() {
+      document.getElementById('step7').classList.remove('active');
+      document.getElementById('progressContainer').style.display = 'none';
+      document.getElementById('successScreen').classList.add('active');
+      window.scrollTo({ top:0, behavior:'smooth' });
+      document.body.removeChild(script);
+    };
+
+    const script = document.createElement('script');
+    script.src = SCRIPT_URL + '?' + params.toString();
+    script.onerror = function() {
+      btn.disabled = false;
+      btn.textContent = 'Enviar pedido';
+      document.getElementById('formError').textContent = 'Erro ao enviar. Por favor tente novamente.';
+      document.getElementById('formError').classList.add('show');
+      document.body.removeChild(script);
+    };
+    document.body.appendChild(script);
+  }
+</script>
+</body>
+</html>
