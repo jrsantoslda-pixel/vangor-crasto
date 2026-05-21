@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Política de Privacidade — VANGOR Gondomar Crasto</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bronze: #A57350;
+    --bronze-light: #C4956E;
+    --off-black: #111110;
+    --dark-card: #211F1C;
+    --dark-border: rgba(165,115,80,0.2);
+    --text-primary: #F5F0EB;
+    --text-secondary: rgba(245,240,235,0.7);
+    --text-muted: rgba(245,240,235,0.4);
+    --font: 'Outfit', sans-serif;
+  }
+
+  html { font-size: 16px; scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font);
+    background-color: var(--off-black);
+    color: var(--text-primary);
+    min-height: 100vh;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(165,115,80,0.07) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Header */
+  .site-header {
+    border-bottom: 1px solid var(--dark-border);
+    padding: 28px 24px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .header-inner {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo-block { display: flex; flex-direction: column; }
+
+  .logo-wordmark {
+    font-size: 22px;
+    font-weight: 300;
+    letter-spacing: 0.35em;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  .logo-gondomar {
+    font-size: 8px;
+    font-weight: 400;
+    letter-spacing: 0.35em;
+    color: var(--bronze);
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .logo-crasto {
+    font-size: 14px;
+    font-weight: 300;
+    letter-spacing: 0.28em;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    margin-top: 1px;
+  }
+
+  .logo-sub {
+    font-size: 7px;
+    font-weight: 400;
+    letter-spacing: 0.4em;
+    color: var(--bronze);
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .back-link {
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .back-link:hover { color: var(--bronze); }
+
+  .back-link svg {
+    width: 14px; height: 14px;
+    stroke: currentColor; fill: none;
+    stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+  }
+
+  /* Main content */
+  .main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 60px 24px 100px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .page-title {
+    font-size: 32px;
+    font-weight: 300;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+    margin-bottom: 8px;
+  }
+
+  .page-subtitle {
+    font-size: 13px;
+    color: var(--bronze);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 48px;
+  }
+
+  .divider {
+    width: 40px;
+    height: 1px;
+    background: var(--bronze);
+    opacity: 0.5;
+    margin-bottom: 48px;
+  }
+
+  .section { margin-bottom: 48px; }
+
+  .section-title {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--bronze);
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--dark-border);
+  }
+
+  .section p {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text-secondary);
+    line-height: 1.75;
+    margin-bottom: 14px;
+  }
+
+  .section p:last-child { margin-bottom: 0; }
+
+  .section ul {
+    list-style: none;
+    margin: 12px 0 14px 0;
+  }
+
+  .section ul li {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.75;
+    padding-left: 16px;
+    position: relative;
+    margin-bottom: 6px;
+  }
+
+  .section ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--bronze);
+    opacity: 0.7;
+  }
+
+  .section a {
+    color: var(--bronze-light);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.2s;
+  }
+
+  .section a:hover { color: var(--bronze); }
+
+  /* Contact box */
+  .contact-box {
+    background: #211F1C;
+    border: 1px solid var(--dark-border);
+    border-radius: 8px;
+    padding: 28px 32px;
+    margin-top: 48px;
+  }
+
+  .contact-box p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 12px;
+  }
+
+  .contact-box p:last-child { margin-bottom: 0; }
+
+  .contact-box a {
+    color: var(--bronze-light);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* Footer */
+  .site-footer {
+    border-top: 1px solid var(--dark-border);
+    padding: 28px 24px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .site-footer p {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+  }
+
+  @media (max-width: 520px) {
+    .page-title { font-size: 24px; }
+    .main { padding: 40px 20px 60px; }
+    .contact-box { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo-block">
+      <div class="logo-wordmark">VANGOR</div>
+      <div class="logo-gondomar">Gondomar</div>
+      <div class="logo-crasto">CRASTO</div>
+      <div class="logo-sub">Interior Design</div>
+    </div>
+    <a href="index.html" class="back-link">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      Voltar
+    </a>
+  </div>
+</header>
+
+<main class="main">
+
+  <h1 class="page-title">Política de Privacidade</h1>
+  <p class="page-subtitle">Privacidade e Termos Legais</p>
+  <div class="divider"></div>
+
+  <div class="section">
+    <h2 class="section-title">Introdução</h2>
+    <p>O acesso e uso deste formulário de pedido de orçamento atribui a condição de Utilizador e pressupõe a total aceitação sem reservas desta Política de Privacidade. A <strong>VANGOR Gondomar Crasto — Interior Design</strong> reserva-se ao direito de alterar as presentes cláusulas sem aviso prévio. Recomendamos que consulte esta página com regularidade de forma a manter-se atualizado.</p>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">Tratamento de Dados</h2>
+    <p>A VANGOR Gondomar Crasto reúne informação pessoal dos utilizadores através do formulário de pedido de orçamento. Todas as informações pessoais recolhidas serão usadas exclusivamente para:</p>
+    <ul>
+      <li>Elaborar uma proposta personalizada para o seu projeto</li>
+      <li>Entrar em contacto consigo para dar seguimento ao pedido</li>
+      <li>Responder às suas dúvidas e consultas</li>
+    </ul>
+    <p>Declaramos que todas as informações pessoais fornecidas serão tratadas em concordância com o Regulamento Geral sobre a Proteção de Dados (RGPD — Regulamento 2016/679 do Parlamento Europeu e do Conselho) e a Lei da Proteção de Dados Pessoais, de forma a garantir a segurança e integridade dos dados de carácter pessoal.</p>
+    <p>Os seus dados pessoais não serão cedidos em caso algum a terceiros sem o seu consentimento expresso, informado e inequívoco.</p>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">Dados Recolhidos</h2>
+    <p>Através do formulário de pedido de orçamento, recolhemos os seguintes dados:</p>
+    <ul>
+      <li>Nome e apelido</li>
+      <li>Endereço de email</li>
+      <li>Número de telefone</li>
+      <li>Informações sobre o projeto (tipo, divisões, localização, orçamento e prazo)</li>
+      <li>Mensagem opcional</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">Direitos do Titular dos Dados</h2>
+    <p>Ao abrigo do RGPD, o titular dos dados tem os seguintes direitos:</p>
+    <ul>
+      <li><strong>Direito de acesso</strong> — pode solicitar uma cópia dos seus dados pessoais</li>
+      <li><strong>Direito de retificação</strong> — pode corrigir dados incorretos ou incompletos</li>
+      <li><strong>Direito ao apagamento</strong> — pode solicitar a eliminação dos seus dados</li>
+      <li><strong>Direito à portabilidade</strong> — pode solicitar os seus dados num formato estruturado</li>
+      <li><strong>Direito de oposição</strong> — pode opor-se ao tratamento dos seus dados</li>
+    </ul>
+    <p>Para exercer qualquer um destes direitos, contacte-nos através do email <a href="mailto:gondomar.js@vangor.pt">gondomar.js@vangor.pt</a>.</p>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">Conservação dos Dados</h2>
+    <p>Os dados pessoais recolhidos serão conservados pelo período estritamente necessário para os fins para os quais foram recolhidos, nomeadamente durante o processo de elaboração e acompanhamento da proposta. Após esse período, os dados serão eliminados de forma segura, salvo obrigação legal em contrário.</p>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">Segurança</h2>
+    <p>Implementamos medidas técnicas e organizacionais adequadas para proteger os seus dados pessoais contra acesso não autorizado, perda, destruição ou divulgação acidental. Os dados são transmitidos de forma segura e armazenados em serviços com elevados padrões de segurança.</p>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">Litígios</h2>
+    <p>Em caso de litígios em linha, o consumidor pode recorrer à plataforma eletrónica de resolução alternativa de litígios criada pela Comissão Europeia, acessível em <a href="https://webgate.ec.europa.eu/odr" target="_blank">webgate.ec.europa.eu</a>.</p>
+    <p>Entidades de Resolução Alternativa de Litígios (RAL):</p>
+    <ul>
+      <li>Centro de Arbitragem de Conflitos de Consumo de Lisboa — <a href="https://www.centroarbitragemlisboa.pt" target="_blank">centroarbitragemlisboa.pt</a></li>
+      <li>CIAB – Centro de Informação, Mediação e Arbitragem de Consumo — <a href="https://www.ciab.pt" target="_blank">ciab.pt</a></li>
+      <li>CNIACC – Centro Nacional de Informação e Arbitragem de Conflitos de Consumo — <a href="https://www.arbitragemdeconsumo.org" target="_blank">arbitragemdeconsumo.org</a></li>
+      <li>Centro de Informação de Consumo e Arbitragem do Porto — <a href="https://www.cicap.pt" target="_blank">cicap.pt</a></li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">Disposições Finais</h2>
+    <p>Esta Política de Privacidade é regulada de acordo com as leis de Portugal e o RGPD. Se qualquer provisão aqui descrita for considerada ilegal ou inexequível, essa provisão será eliminada ou reduzida nos termos da lei, não afetando a validade das restantes disposições.</p>
+    <p>A VANGOR Gondomar Crasto reserva-se o direito de atualizar esta política a qualquer momento. A data da última atualização é indicada no rodapé desta página.</p>
+  </div>
+
+  <div class="contact-box">
+    <p><strong>Contacto para questões de privacidade:</strong></p>
+    <p>VANGOR Gondomar Crasto — Interior Design<br>
+    Email: <a href="mailto:gondomar.js@vangor.pt">gondomar.js@vangor.pt</a></p>
+    <p>Para exercer os seus direitos ou esclarecer qualquer dúvida sobre o tratamento dos seus dados pessoais, entre em contacto connosco através do email acima indicado.</p>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <p>© 2025 VANGOR Gondomar Crasto — Interior Design &nbsp;·&nbsp; Última atualização: maio 2025</p>
+</footer>
+
+</body>
+</html>
